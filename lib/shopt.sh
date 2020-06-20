@@ -4,9 +4,8 @@
 # taken from bash-sensible and other sources
 ## GENERAL OPTIONS ##
 
-# Prevent file overwrite on stdout redirection
-# Use `>|` to force redirection to an existing file
-set -o noclobber
+# Allow file overwrite on stdout redirection
+set +o noclobber
 
 # Update window size after every command
 shopt -s checkwinsize

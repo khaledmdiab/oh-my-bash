@@ -21,11 +21,15 @@
 # 07:45:05 (venv) user@host ~ →
 #
 
+icon_user=""
+icon_host="@"
+icon_directory=" in 📁 "
+
 SCM_NONE_CHAR=''
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=""
-SCM_THEME_PROMPT_PREFIX="${green}|"
-SCM_THEME_PROMPT_SUFFIX="${green}|"
+SCM_THEME_PROMPT_PREFIX=" on 🌿 ${green}<"
+SCM_THEME_PROMPT_SUFFIX="${green}>"
 SCM_GIT_SHOW_MINIMAL_INFO=true
 
 CLOCK_THEME_PROMPT_PREFIX=''
@@ -34,19 +38,19 @@ THEME_SHOW_CLOCK=true
 THEME_CLOCK_COLOR=${THEME_CLOCK_COLOR:-"$bold_blue"}
 THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:-"%I:%M:%S"}
 
-VIRTUALENV_THEME_PROMPT_PREFIX='('
+VIRTUALENV_THEME_PROMPT_PREFIX='🐍 ('
 VIRTUALENV_THEME_PROMPT_SUFFIX=') '
 
 function prompt_command() {
     # This needs to be first to save last command return code
     local RC="$?"
 
-    hostname="${bold_black}\u@\h"
-    virtualenv="${white}$(virtualenv_prompt)"
+    hostname="${icon_user}${bold_yellow}\u${normal}${icon_host}${bold_cyan}\h${normal}"
+    virtualenv="${pink}$(virtualenv_prompt)"
 
     # Set return status color
     if [[ ${RC} == 0 ]]; then
-        ret_status="${bold_green}"
+        ret_status="${bold_orange}"
     else
         ret_status="${bold_red}"
     fi
@@ -54,7 +58,12 @@ function prompt_command() {
     # Append new history lines to history file
     history -a
 
-    PS1="$(clock_prompt)${virtualenv}${hostname} ${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
+    #PS1="${virtualenv}${hostname} ${bold_cyan}\W $(scm_prompt_char_info)${ret_status}→ ${normal}"
+    PS1="${virtualenv}${hostname}${icon_directory}${bold_purple}\W${normal} $(scm_prompt_char_info)
+  ${ret_status}⤳ ${normal}"
+    PS2="> "
+    PS4="+ "   
+
 }
 
 safe_append_prompt_command prompt_command
